@@ -16,10 +16,13 @@ let data = [
     }
 ]
     
-const servURL = "http://service2:3000";
+const servURL = "http://service2:3000/api/service2";
 
 module.exports.register = async (req, res, next) => {
-    let responseFromDifferentService =  await axios.get(servURL);
+    let responseFromDifferentService =  await axios.get(servURL)
+    .catch(error=> {
+        console.log("error: ", error);
+    });
     // await axios.get(servURL)
     //     .then(ress => {
     //         console.log('tt2: ', ress);
@@ -29,7 +32,11 @@ module.exports.register = async (req, res, next) => {
     //     .catch(error => {
     //         console.log(error);
     //     });
-    res.json(responseFromDifferentService)
+    //console.log(responseFromDifferentService.data);
+    //data.concat(responseFromDifferentService.data);
+    data = [...data, ...responseFromDifferentService.data]
+    //console.log(data);
+    res.json(data);
 }
 
 module.exports.authenticate = (req, res, next) => {
